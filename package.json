@@ -4,9 +4,6 @@
   "description": "Rename files tool",
   "type": "module",
   "main": "index.js",
-  "bin": {
-    "rename-tst-cli": "./bin/cli.js"
-  },
   "engines": ">=16",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
