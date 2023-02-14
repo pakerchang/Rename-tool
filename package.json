@@ -1,0 +1,21 @@
+{
+  "name": "rename-cli",
+  "version": "1.0.0",
+  "description": "Rename files tool",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "rename-tst-cli": "./bin/cli.js"
+  },
+  "engines": ">=16",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Paker Zhang",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "inquirer": "^9.1.4",
+    "nanospinner": "^1.1.0"
+  }
+}
