@@ -1,13 +1,12 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
-import { renameFiles } from "./utils/renameFiles.js";
+import { renameFiles, checkFolder } from "./utils/renameFiles.js";
 
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 const userRequests = {
   isPrefix: false,
   isOpenNewFolder: false,
-  isPending: false,
   filePrefix: "",
 };
 
@@ -17,10 +16,9 @@ async function initProject() {
     await getPrefix();
     await confirmPrefix();
   }
-  if (userRequests.isPending) {
-    await handleSpinner(userRequests.isPending);
-    await renameFiles(userRequests.filePrefix);
-  }
+  await handleSpinner(true);
+  await renameFiles(userRequests.filePrefix);
+  await handleSpinner(false);
 }
 
 async function askPrefix() {
@@ -28,7 +26,7 @@ async function askPrefix() {
     .prompt({
       name: "ask_prefix",
       type: "list",
-      message: "需要幫檔名添加前墜嗎？",
+      message: "需要幫檔名添加前綴嗎？",
       choices: [
         {
           name: "是",
@@ -42,9 +40,7 @@ async function askPrefix() {
       default: false,
     })
     .then((rep) =>
-      rep.ask_prefix
-        ? (userRequests.isPrefix = rep.ask_prefix)
-        : (userRequests.isPending = true)
+      rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder()
     );
 }
 
@@ -54,7 +50,7 @@ async function getPrefix() {
       name: "file_prefix",
       type: "input",
       message: `請輸入檔案前墜名稱: \n`,
-      suffix: ` 請用 '_' 或 '-' 取代空格 \n`,
+      suffix: ` 請用 '_' 或 '-' 代替空格 \n`,
       validate(input) {
         if (input.indexOf(" ") >= 0) {
           throw Error(chalk.redBright("檔案名稱內帶有空格，請重新輸入"));
@@ -71,7 +67,7 @@ async function confirmPrefix() {
     .prompt({
       name: "confirm_prefix",
       type: "confirm",
-      message: `請確認設定的檔案前墜：\n`,
+      message: `請確認設定的檔案前綴：\n`,
       suffix: `Example: ${chalk.greenBright(userRequests.filePrefix + ".png")}`,
       default: userRequests.isPrefix,
     })
@@ -79,22 +75,18 @@ async function confirmPrefix() {
       if (!rep.confirm_prefix) {
         userRequests.isPrefix = rep.confirm_prefix;
         return initProject();
-      } else {
-        console.log("Ready to rename files");
-        userRequests.isPending = true;
       }
     });
 }
 
 async function handleSpinner(isPending) {
-  const spinner = createSpinner("Renaming...").start();
+  const spinner = createSpinner("更名中...").start();
   await timeSnap();
   if (isPending) {
-    return spinner.success({ text: "Rename is done." });
+    return spinner.spin({ text: "更名中..." });
   }
   if (!isPending) {
-    spinner.error({ text: "Something is wrong." });
-    return process.exit(1);
+    return spinner.success({ text: "完成" }) && process.exit(1);
   }
 }
 

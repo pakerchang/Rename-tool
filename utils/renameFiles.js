@@ -1,56 +1,56 @@
 import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
-import { createSpinner } from "nanospinner";
 
+const fsPromise = fs.promises;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
-const getFiles = fs.readdirSync(path.join(__dirname));
-const directoryPath = path.join(__dirname);
+// const directoryPath = path.join(__dirname);
+const directoryPath = "./assets";
+const getFiles = fs.readdirSync(directoryPath);
 
-function renameFiles(prefixName) {
-  const _folder = new Promise(() => checkFolder());
-
+function renameFiles(prefixName, isNewFolder) {
   const checkFile = (file) => ({
     isExist: fileTypes.includes(path.extname(file)),
+    isNewFolder: isNewFolder,
     filePath: directoryPath,
     prefixName: prefixName,
     extension: path.extname(file),
   });
 
-  _folder.then(() =>
-    getFiles.forEach((file, idx) => {
-      const result = checkFile(file);
-      if (result.isExist) {
-        copy_renameFile(file, idx, result);
-      }
-    })
-  );
+  getFiles.forEach((file, idx) => {
+    const result = checkFile(file);
+    if (result.isExist) {
+      copy_renameFile(file, idx, result);
+    }
+  });
 }
 
 function checkFolder() {
-  const dir = "./NewFolder";
+  // Need props to fixed path
+  const dir = "./assets/NewFolder";
 
-  fs.access(
-    dir,
-    (err) =>
-      err &&
-      fs.chmod(
-        dir,
-        777,
-        (err) => !err && fs.mkdir(dir, (err) => err & console.log(err))
-      )
-  );
+  fsPromise.access(dir).then(fs.mkdir(dir, (err) => err & console.log(err)));
 }
 
 function copy_renameFile(file, idx, fileInfo) {
   const newDirectoryPath = fileInfo.filePath + "/NewFolder";
-  fs.copyFile(fileInfo.filePath + file, newDirectoryPath);
-  fs.rename(
-    newDirectoryPath + file,
-    fileInfo.prefixName + idx + fileInfo.extension
-  );
+  if (fileInfo.isNewFolder) {
+    // fsPromise
+    //   .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath)
+    //   .then(() =>
+    //     fs.renameSync(
+    //       newDirectoryPath + "/" + file,
+    //       newDirectoryPath + "/" + fileInfo.prefixName + idx + fileInfo.extension
+    //     )
+    //   );
+  } else {
+    fs.renameSync(
+      fileInfo.filePath + "/" + file,
+      fileInfo.filePath + "/" + fileInfo.prefixName + idx + fileInfo.extension
+    );
+  }
 }
 
-export { renameFiles };
+export { renameFiles, checkFolder };
