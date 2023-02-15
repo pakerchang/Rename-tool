@@ -1,42 +1,75 @@
-import fs from "fs";
-import path from "path";
 import chalk from "chalk";
-import { createSpinner } from "nanospinner";
+import inquirer from "inquirer";
+import { renameFiles } from "./utils/index.js";
 
-const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
-function executeScript() {
-  const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
-  const getFiles = fs.readdirSync(path.join(__dirname));
-  const directoryPath = path.jon(__dirname);
-  const testFiles = fs.readdirSync(testAssets);
-
-  const checkFile = (file) => ({
-    isExist: fileTypes.includes(path.extname(file)),
-    fileExtension: path.extname(file),
-  });
-
-  testFiles.forEach((file, idx) => {
-    const oldPath = `${testAssets}/${file}`;
-
-    const result = checkFile(file);
-    if (result.isExist) {
-      fs.rename(
-        directoryPath + file,
-        directoryPath + `${idx + result.fileExtension}`,
-        (err) => err && console.log(err)
-      );
-    } else {
-    }
-  });
-}
-
-executeScript();
-
+const userRequest = {
+  isPrefix: false,
+  filePrefix: "",
+};
 async function initProject() {
-  const title = chalk.bgGreen("Initial tool....\n");
-
-  await timeSnap();
-
-  title.stop();
+  await askPrefix();
+  if (userRequest.isPrefix) {
+    await getPrefix();
+    await confirmPrefix();
+  }
+  await renameFiles(userRequest.filePrefix);
 }
-export { executeScript };
+
+async function askPrefix() {
+  await inquirer
+    .prompt({
+      name: "ask_prefix",
+      type: "list",
+      message: "需要幫檔名添加前墜嗎？",
+      choices: [
+        {
+          name: "是",
+          value: true,
+        },
+        {
+          name: "否",
+          value: false,
+        },
+      ],
+      default: false,
+    })
+    .then((rep) => (userRequest.isPrefix = rep.ask_prefix));
+}
+
+async function getPrefix() {
+  await inquirer
+    .prompt({
+      name: "file_prefix",
+      type: "input",
+      message: `請輸入檔案前墜名稱: \n`,
+      suffix: ` 請用 '_' 或 '-' 取代空格 \n`,
+      validate(input) {
+        if (input.indexOf(" ") >= 0) {
+          throw Error(chalk.redBright("檔案名稱內帶有空格，請重新輸入"));
+        } else {
+          return true;
+        }
+      },
+    })
+    .then((rep) => (userRequest.filePrefix = rep.file_prefix));
+}
+
+async function confirmPrefix() {
+  await inquirer
+    .prompt({
+      name: "confirm_prefix",
+      type: "confirm",
+      message: `請確認設定的檔案前墜：\n`,
+      suffix: `Example: ${chalk.greenBright(userRequest.filePrefix + ".png")}`,
+      default: userRequest.isPrefix,
+    })
+    .then((rep) => {
+      if (!rep.confirm_prefix) {
+        userRequest.isPrefix = rep.confirm_prefix;
+        return initProject();
+      }
+      if (rep.confirm_prefix) handleSpinner(true);
+    });
+}
+
+initProject();
