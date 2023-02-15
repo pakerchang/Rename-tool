@@ -1,12 +1,14 @@
 {
-  "name": "rename-cli",
+  "name": "@pakerzhang/rename-cli",
   "version": "1.0.0",
   "description": "Rename files tool",
   "type": "module",
-  "main": "index.js",
-  "engines": ">=16",
+  "main": "./src/index.js",
+  "engines": {
+    "node": ">=14"
+  },
   "bin": {
-    "rename-image": "./bin/cli.js"
+    "rename-image": "./src/bin/cli.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,8 +16,16 @@
   "author": "Paker Zhang",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pakerchang/Rename-tool"
+    "url": "git@github.com:pakerchang/Rename-tool.git"
   },
+  "homepage": "https://github.com/pakerchang/Rename-tool",
+  "bug": "https://github.com/pakerchang/Rename-tool/issues",
+  "keyword": [
+    "rename image tool"
+  ],
+  "files": [
+    "src"
+  ],
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.2.0",
