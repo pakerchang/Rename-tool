@@ -4,9 +4,9 @@ import { createSpinner } from "nanospinner";
 import { renameFiles, checkFolder } from "./utils/renameFiles.js";
 
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
+
 const userRequests = {
   isPrefix: false,
-  isOpenNewFolder: false,
   filePrefix: "",
 };
 
@@ -17,7 +17,7 @@ async function initProject() {
     await confirmPrefix();
   }
   await handleSpinner(true);
-  await renameFiles(userRequests.filePrefix);
+  renameFiles(userRequests.filePrefix);
   await handleSpinner(false);
 }
 
@@ -39,9 +39,10 @@ async function askPrefix() {
       ],
       default: false,
     })
-    .then((rep) =>
-      rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder()
-    );
+    .then((rep) => {
+      // rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder();
+      if (rep.ask_prefix) userRequests.isPrefix = rep.ask_prefix;
+    });
 }
 
 async function getPrefix() {
@@ -49,7 +50,7 @@ async function getPrefix() {
     .prompt({
       name: "file_prefix",
       type: "input",
-      message: `請輸入檔案前墜名稱: \n`,
+      message: `請輸入檔案前綴名稱: \n`,
       suffix: ` 請用 '_' 或 '-' 代替空格 \n`,
       validate(input) {
         if (input.indexOf(" ") >= 0) {

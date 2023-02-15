@@ -7,7 +7,6 @@ const directoryPath = path.join(process.cwd());
 const getFiles = fs.readdirSync(directoryPath);
 
 function renameFiles(prefixName, isNewFolder) {
-  console.log(directoryPath);
   const checkFile = (file) => ({
     isExist: fileTypes.includes(path.extname(file)),
     isNewFolder: isNewFolder,
