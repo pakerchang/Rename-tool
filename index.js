@@ -67,8 +67,9 @@ async function confirmPrefix() {
       if (!rep.confirm_prefix) {
         userRequest.isPrefix = rep.confirm_prefix;
         return initProject();
+      } else {
+        console.log("Ready to rename files");
       }
-      if (rep.confirm_prefix) handleSpinner(true);
     });
 }
 

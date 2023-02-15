@@ -34,11 +34,11 @@ async function handleSpinner(isPending) {
   const spinner = createSpinner("Renaming...").start();
   await timeSnap();
   if (isPending) {
-    spinner.success({ text: "Rename is done." });
+    return spinner.success({ text: "Rename is done." });
   }
   if (!isPending) {
     spinner.error({ text: "Something is wrong." });
-    process.exit(1);
+    return process.exit(1);
   }
 }
 export default renameFiles;
