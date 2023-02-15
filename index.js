@@ -2,17 +2,18 @@ import chalk from "chalk";
 import inquirer from "inquirer";
 import { renameFiles } from "./utils/index.js";
 
-const userRequest = {
+const userRequests = {
   isPrefix: false,
+  isOpenNewFolder: false,
   filePrefix: "",
 };
 async function initProject() {
   await askPrefix();
-  if (userRequest.isPrefix) {
+  if (userRequests.isPrefix) {
     await getPrefix();
     await confirmPrefix();
   }
-  await renameFiles(userRequest.filePrefix);
+  await renameFiles(userRequests.filePrefix);
 }
 
 async function askPrefix() {
@@ -33,7 +34,7 @@ async function askPrefix() {
       ],
       default: false,
     })
-    .then((rep) => (userRequest.isPrefix = rep.ask_prefix));
+    .then((rep) => (userRequests.isPrefix = rep.ask_prefix));
 }
 
 async function getPrefix() {
@@ -51,7 +52,7 @@ async function getPrefix() {
         }
       },
     })
-    .then((rep) => (userRequest.filePrefix = rep.file_prefix));
+    .then((rep) => (userRequests.filePrefix = rep.file_prefix));
 }
 
 async function confirmPrefix() {
@@ -60,12 +61,12 @@ async function confirmPrefix() {
       name: "confirm_prefix",
       type: "confirm",
       message: `請確認設定的檔案前墜：\n`,
-      suffix: `Example: ${chalk.greenBright(userRequest.filePrefix + ".png")}`,
-      default: userRequest.isPrefix,
+      suffix: `Example: ${chalk.greenBright(userRequests.filePrefix + ".png")}`,
+      default: userRequests.isPrefix,
     })
     .then((rep) => {
       if (!rep.confirm_prefix) {
-        userRequest.isPrefix = rep.confirm_prefix;
+        userRequests.isPrefix = rep.confirm_prefix;
         return initProject();
       } else {
         console.log("Ready to rename files");
