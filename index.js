@@ -90,4 +90,4 @@ async function handleSpinner(isPending) {
   }
 }
 
-initProject();
+export { initProject };

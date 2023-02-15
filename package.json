@@ -5,6 +5,9 @@
   "type": "module",
   "main": "index.js",
   "engines": ">=16",
+  "bin": {
+    "rename-image": "./bin/cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

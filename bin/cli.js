@@ -1,3 +1,5 @@
-import { executeScript } from "../index.js";
+#!/usr/bin/env node
 
-console.log(executeScript);
+import { initProject } from "../index.js";
+
+initProject();

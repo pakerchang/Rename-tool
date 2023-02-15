@@ -1,16 +1,13 @@
-import { fileURLToPath } from "url";
 import fs from "fs";
 import path from "path";
 
 const fsPromise = fs.promises;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
-// const directoryPath = path.join(__dirname);
-const directoryPath = "./assets";
+const directoryPath = path.join(process.cwd());
 const getFiles = fs.readdirSync(directoryPath);
 
 function renameFiles(prefixName, isNewFolder) {
+  console.log(directoryPath);
   const checkFile = (file) => ({
     isExist: fileTypes.includes(path.extname(file)),
     isNewFolder: isNewFolder,
