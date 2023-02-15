@@ -8,28 +8,52 @@ const __dirname = path.dirname(__filename);
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 function renameFiles(prefixName) {
-  handleSpinner(true);
   const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
   const getFiles = fs.readdirSync(path.join(__dirname));
   const directoryPath = path.join(__dirname);
 
+  handleSpinner(true);
+  checkFolder();
+
   const checkFile = (file) => ({
     isExist: fileTypes.includes(path.extname(file)),
-    fileExtension: path.extname(file),
+    filePath: directoryPath,
+    prefixName: prefixName,
+    extension: path.extname(file),
   });
 
   getFiles.forEach((file, idx) => {
     const result = checkFile(file);
     if (result.isExist) {
-      fs.rename(
-        directoryPath + file,
-        directoryPath + `${prefixName + idx + result.fileExtension}`,
-        (err) => err && console.log(err)
-      );
-    } else {
+      copy_renameFile(file, idx, result);
     }
   });
 }
+
+function checkFolder() {
+  const dir = "./NewFolder";
+
+  fs.access(
+    dir,
+    (err) =>
+      err &&
+      fs.chmod(
+        dir,
+        777,
+        (err) => !err && fs.mkdir(dir, (err) => err & console.log(err))
+      )
+  );
+}
+
+function copy_renameFile(file, idx, fileInfo) {
+  const newDirectoryPath = fileInfo.filePath + "/NewFolder";
+  fs.copyFile(fileInfo.filePath + file, newDirectoryPath);
+  fs.rename(
+    newDirectoryPath + file,
+    fileInfo.prefixName + idx + fileInfo.extension
+  );
+}
+
 async function handleSpinner(isPending) {
   const spinner = createSpinner("Renaming...").start();
   await timeSnap();
