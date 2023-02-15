@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/pakerchang/Rename-tool",
   "bug": "https://github.com/pakerchang/Rename-tool/issues",
-  "keyword": [
-    "rename image tool"
+  "keywords": [
+    "rename image tool",
+    "tool",
+    "node"
   ],
   "files": [
     "src"
