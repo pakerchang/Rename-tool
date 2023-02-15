@@ -1,6 +1,6 @@
 {
   "name": "@pakerzhang/rename-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Rename files tool",
   "type": "module",
   "main": "./src/index.js",
