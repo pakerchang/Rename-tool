@@ -12,6 +12,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paker Zhang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pakerchang/Rename-tool"
+  },
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.2.0",
