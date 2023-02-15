@@ -1,19 +1,26 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
-import { renameFiles } from "./utils/index.js";
+import { createSpinner } from "nanospinner";
+import { renameFiles } from "./utils/renameFiles.js";
 
+const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 const userRequests = {
   isPrefix: false,
   isOpenNewFolder: false,
+  isPending: false,
   filePrefix: "",
 };
+
 async function initProject() {
   await askPrefix();
   if (userRequests.isPrefix) {
     await getPrefix();
     await confirmPrefix();
   }
-  await renameFiles(userRequests.filePrefix);
+  if (userRequests.isPending) {
+    await handleSpinner(userRequests.isPending);
+    await renameFiles(userRequests.filePrefix);
+  }
 }
 
 async function askPrefix() {
@@ -34,7 +41,11 @@ async function askPrefix() {
       ],
       default: false,
     })
-    .then((rep) => (userRequests.isPrefix = rep.ask_prefix));
+    .then((rep) =>
+      rep.ask_prefix
+        ? (userRequests.isPrefix = rep.ask_prefix)
+        : (userRequests.isPending = true)
+    );
 }
 
 async function getPrefix() {
@@ -70,8 +81,21 @@ async function confirmPrefix() {
         return initProject();
       } else {
         console.log("Ready to rename files");
+        userRequests.isPending = true;
       }
     });
+}
+
+async function handleSpinner(isPending) {
+  const spinner = createSpinner("Renaming...").start();
+  await timeSnap();
+  if (isPending) {
+    return spinner.success({ text: "Rename is done." });
+  }
+  if (!isPending) {
+    spinner.error({ text: "Something is wrong." });
+    return process.exit(1);
+  }
 }
 
 initProject();
