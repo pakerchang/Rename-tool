@@ -17,8 +17,9 @@ async function initProject() {
     await getPrefix();
     await confirmPrefix();
   }
+  await askNewFolder();
   await handleSpinner(true);
-  renameFiles(userRequests.filePrefix);
+  await renameFiles(userRequests.filePrefix, userRequests.isNewFolder);
   await handleSpinner(false);
 }
 
@@ -83,11 +84,22 @@ async function confirmPrefix() {
     });
 }
 
+async function askNewFolder() {
+  await inquirer
+    .prompt({
+      name: "new_folder",
+      type: "confirm",
+      message: "需要將更名檔案存到新資歷夾嗎？",
+      default: false,
+    })
+    .then((rep) => (userRequests.isNewFolder = rep.new_folder));
+}
+
 async function handleSpinner(isPending) {
-  const spinner = createSpinner("更名中...").start();
+  const spinner = createSpinner("更名中... \n").start();
   await timeSnap();
   if (isPending) {
-    return spinner.spin({ text: "更名中..." });
+    return spinner.spin({ text: "更名中... \n" });
   }
   if (!isPending) {
     return spinner.success({ text: "完成" }) && process.exit(1);
