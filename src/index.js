@@ -7,6 +7,7 @@ const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 const userRequests = {
   isPrefix: false,
+  isNewFolder: false,
   filePrefix: "",
 };
 
@@ -40,8 +41,8 @@ async function askPrefix() {
       default: false,
     })
     .then((rep) => {
-      // rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder();
-      if (rep.ask_prefix) userRequests.isPrefix = rep.ask_prefix;
+      rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder();
+      // if (rep.ask_prefix) userRequests.isPrefix = rep.ask_prefix;
     });
 }
 
@@ -69,7 +70,9 @@ async function confirmPrefix() {
       name: "confirm_prefix",
       type: "confirm",
       message: `請確認設定的檔案前綴：\n`,
-      suffix: `Example: ${chalk.greenBright(userRequests.filePrefix + ".png")}`,
+      suffix: `Example: ${chalk.greenBright(
+        userRequests.filePrefix + "0.png"
+      )}`,
       default: userRequests.isPrefix,
     })
     .then((rep) => {
