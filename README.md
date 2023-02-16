@@ -30,3 +30,9 @@ rename-image
 [Windows](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac#:~:text=How%20to%20Install%20Node.js%20and%20NPM%20on%20Windows%3F) install
 
 [macOS](https://radixweb.com/blog/installing-npm-and-nodejs-on-windows-and-mac#:~:text=How%20to%20Install%20Node.js%20and%20NPM%20on%20Mac%3F) install
+
+## Todo
+
+- [ ] 修正檔案讀取順序
+- [ ] 釋出執行檔案
+- [ ] 新增動態增減改動檔案類型功能
