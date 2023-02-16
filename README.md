@@ -21,6 +21,8 @@ cd /usr/desktop/assets/
 rename-image
 ```
 
+![Guide]('./src/guide/rename-tool.gif')
+
 ## 安裝
 
 在下載套件前請確保電腦已安裝 `npm` 及 `node`

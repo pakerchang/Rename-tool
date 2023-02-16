@@ -34,7 +34,6 @@ function checkFolder() {
 
 function copy_renameFile(file, idx, fileInfo) {
   const newDirectoryPath = fileInfo.filePath + "/NewFolder";
-  console.log(fileInfo.isNewFolder, file);
   if (fileInfo.isNewFolder) {
     fsPromise
       .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath + "/" + file)
