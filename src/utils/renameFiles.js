@@ -24,23 +24,27 @@ function renameFiles(prefixName, isNewFolder) {
 }
 
 function checkFolder() {
-  // Need props to fixed path
-  const dir = "./assets/NewFolder";
+  const dir = `${process.cwd()}/NewFolder`;
 
-  fsPromise.access(dir).then(fs.mkdir(dir, (err) => err & console.log(err)));
+  const checkResult = fs.existsSync(dir);
+  if (!checkResult) fs.mkdirSync(dir);
 }
 
 function copy_renameFile(file, idx, fileInfo) {
   const newDirectoryPath = fileInfo.filePath + "/NewFolder";
   if (fileInfo.isNewFolder) {
-    // fsPromise
-    //   .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath)
-    //   .then(() =>
-    //     fs.renameSync(
-    //       newDirectoryPath + "/" + file,
-    //       newDirectoryPath + "/" + fileInfo.prefixName + idx + fileInfo.extension
-    //     )
-    //   );
+    fsPromise
+      .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath)
+      .then(() =>
+        fs.renameSync(
+          newDirectoryPath + "/" + file,
+          newDirectoryPath +
+            "/" +
+            fileInfo.prefixName +
+            idx +
+            fileInfo.extension
+        )
+      );
   } else {
     fs.renameSync(
       fileInfo.filePath + "/" + file,
