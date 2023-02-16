@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import chalk from "chalk";
 
 const fsPromise = fs.promises;
 const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
@@ -7,6 +8,7 @@ const directoryPath = path.join(process.cwd());
 const getFiles = fs.readdirSync(directoryPath);
 
 function renameFiles(prefixName, isNewFolder) {
+  if (isNewFolder) checkFolder();
   const checkFile = (file) => ({
     isExist: fileTypes.includes(path.extname(file)),
     isNewFolder: isNewFolder,
@@ -32,23 +34,42 @@ function checkFolder() {
 
 function copy_renameFile(file, idx, fileInfo) {
   const newDirectoryPath = fileInfo.filePath + "/NewFolder";
+  console.log(fileInfo.isNewFolder, file);
   if (fileInfo.isNewFolder) {
     fsPromise
-      .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath)
+      .copyFile(fileInfo.filePath + "/" + file, newDirectoryPath + "/" + file)
       .then(() =>
-        fs.renameSync(
+        fs.rename(
           newDirectoryPath + "/" + file,
           newDirectoryPath +
             "/" +
             fileInfo.prefixName +
             idx +
-            fileInfo.extension
+            fileInfo.extension,
+          (err) => {
+            if (err) throw err;
+            console.log(
+              chalk.blueBright("Convert:"),
+              chalk.greenBright(
+                file + " -> " + fileInfo.prefixName + idx + fileInfo.extension
+              )
+            );
+          }
         )
       );
   } else {
-    fs.renameSync(
+    fs.rename(
       fileInfo.filePath + "/" + file,
-      fileInfo.filePath + "/" + fileInfo.prefixName + idx + fileInfo.extension
+      fileInfo.filePath + "/" + fileInfo.prefixName + idx + fileInfo.extension,
+      (err) => {
+        if (err) throw err;
+        console.log(
+          chalk.blueBright("Convert:"),
+          chalk.greenBright(
+            file + " -> " + fileInfo.prefixName + idx + fileInfo.extension
+          )
+        );
+      }
     );
   }
 }
