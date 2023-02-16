@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import inquirer from "inquirer";
 import { createSpinner } from "nanospinner";
-import { renameFiles, checkFolder } from "./utils/renameFiles.js";
+import { renameFiles } from "./utils/renameFiles.js";
 
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -42,8 +42,7 @@ async function askPrefix() {
       default: false,
     })
     .then((rep) => {
-      rep.ask_prefix ? (userRequests.isPrefix = rep.ask_prefix) : checkFolder();
-      // if (rep.ask_prefix) userRequests.isPrefix = rep.ask_prefix;
+      if (rep.ask_prefix) userRequests.isPrefix = rep.ask_prefix;
     });
 }
 
