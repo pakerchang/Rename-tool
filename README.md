@@ -8,7 +8,6 @@
 
 ```zsh
 npm install -g @pakerzhang/rename-tool
-// or
 # or
 yarn global add @pakerzhang/rename-tool
 ```
