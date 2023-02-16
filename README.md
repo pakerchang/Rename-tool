@@ -21,7 +21,7 @@ cd /usr/desktop/assets/
 rename-image
 ```
 
-![Guide]('src/guide/rename-tool.gif')
+![Guide](https://www.dropbox.com/s/dis3z97copyrxvl/rename-tool.gif?dl=0)
 
 ## 安裝
 
