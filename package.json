@@ -1,17 +1,19 @@
 {
   "name": "@pakerzhang/rename-cli",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "Rename files tool",
   "type": "module",
-  "main": "./src/index.js",
+  "exports": "./src/index.mjs",
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "bin": {
-    "rename-image": "./src/bin/cli.js"
+    "rename-image": "./src/bin/cli.mjs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --trace-warnings ./src/bin/cli.mjs",
+    "build": "pkg . --public -d"
   },
   "author": "Paker Zhang",
   "repository": {
@@ -28,6 +30,13 @@
   "files": [
     "src"
   ],
+  "pkg": {
+    "assets": [
+      "./src/**/*.{mjs,js,cjs}",
+      "./node_modules"
+    ],
+    "outputPath": "dist"
+  },
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.2.0",
