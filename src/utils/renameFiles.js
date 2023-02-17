@@ -5,7 +5,7 @@ import chalk from "chalk";
 const fsPromise = fs.promises;
 const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
 const directoryPath = path.join(process.cwd());
-const getFiles = fs.readdirSync(directoryPath);
+const getFiles = fs.readdirSync(directoryPath).filter((item) => fileTypes.includes(path.extname(item)));
 
 function renameFiles(prefixName, isNewFolder) {
   if (isNewFolder) checkFolder();
