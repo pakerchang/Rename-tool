@@ -1,11 +1,13 @@
-import fs from "fs";
-import path from "path";
-import chalk from "chalk";
+const fs = require("fs");
+const path = require("path");
+const chalk = require("chalk");
 
 const fsPromise = fs.promises;
 const fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
 const directoryPath = path.join(process.cwd());
-const getFiles = fs.readdirSync(directoryPath).filter((item) => fileTypes.includes(path.extname(item)));
+const getFiles = fs
+  .readdirSync(directoryPath)
+  .filter((item) => fileTypes.includes(path.extname(item)));
 
 function renameFiles(prefixName, isNewFolder) {
   if (isNewFolder) checkFolder();
@@ -73,4 +75,4 @@ function copy_renameFile(file, idx, fileInfo) {
   }
 }
 
-export { renameFiles, checkFolder };
+module.exports = renameFiles;
