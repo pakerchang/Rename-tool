@@ -1,7 +1,7 @@
-import chalk from "chalk";
-import inquirer from "inquirer";
-import { createSpinner } from "nanospinner";
-import { renameFiles } from "./utils/renameFiles.mjs";
+const chalk = require("chalk");
+const inquirer = require("inquirer");
+const { createSpinner } = require("nanospinner");
+const renameFiles = require("./utils/renameFiles.js");
 
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -105,4 +105,4 @@ async function handleSpinner(isPending) {
   }
 }
 
-export { initProject };
+module.exports = initProject;
