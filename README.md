@@ -1,6 +1,4 @@
-# Rename-tool
-
-## 命名自動化
+## Rename-tool 命名自動化
 
 主要針對圖檔重新命名自動化，目前支援副檔名型別為： `jpeg`, `jpg`, `png`, `svg`
 
