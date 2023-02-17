@@ -1,6 +1,6 @@
 {
   "name": "@pakerzhang/rename-cli",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Rename files tool",
   "main": "./src/index.js",
   "engines": {
@@ -29,9 +29,6 @@
   "files": [
     "src"
   ],
-  "pkg": {
-    "outputPath": "dist"
-  },
   "license": "MIT",
   "dependencies": {
     "chalk": "4.1.2",
