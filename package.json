@@ -13,7 +13,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --trace-warnings ./src/bin/cli.mjs",
-    "build": "pkg . --public -d"
+    "build": "pkg .  --no-bytecode"
   },
   "author": "Paker Zhang",
   "repository": {
@@ -31,6 +31,9 @@
     "src"
   ],
   "pkg": {
+    "scripts": [
+      "./src/**/*.{mjs,js,cjs}"
+    ],
     "assets": [
       "./src/**/*.{mjs,js,cjs}",
       "./node_modules"
