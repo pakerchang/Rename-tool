@@ -1,7 +1,10 @@
 const chalk = require("chalk");
+const path = require("path");
+const fs = require("fs");
 const inquirer = require("inquirer");
 const { createSpinner } = require("nanospinner");
 const RenameCore = require("./rename.js");
+
 const timeSnap = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
 class ScriptActions {
@@ -9,9 +12,13 @@ class ScriptActions {
     this.isPrefix = false;
     this.isNewFolder = false;
     this.filePrefix = "";
+    this.directoryPath = path.join(process.cwd() + "/temp");
+    this.typeList = ["jpg", "jpeg", "png", "svg"];
+    this.renameCore = new RenameCore(this.directoryPath);
   }
 
   async initProject() {
+    await this.askFileType();
     await this.askPrefix();
     if (this.isPrefix) {
       await this.getPreFix();
@@ -19,8 +26,24 @@ class ScriptActions {
     }
     await this.askNewFolder();
     await this.handleSpinner(true);
-    await RenameCore.rename_action(this.isPrefix, this.isNewFolder);
+    this.renameCore.getFiles = await fs
+      .readdirSync(this.directoryPath)
+      .filter((item) => this.renameCore.fileTypes.includes(path.extname(item)));
+
+    await this.renameCore.rename_action(this.isPrefix, this.isNewFolder);
+
     await this.handleSpinner(false);
+  }
+
+  async askFileType() {
+    await inquirer
+      .prompt({
+        name: "type_list",
+        type: "checkbox",
+        message: "請選擇要改變的圖檔類型",
+        choices: this.typeList.map((item) => ({ name: item, value: item })),
+      })
+      .then((rep) => (this.renameCore.fileTypes = rep.type_list.map((item) => "." + item)));
   }
 
   async askPrefix() {
@@ -83,7 +106,7 @@ class ScriptActions {
       .prompt({
         name: "new_folder",
         type: "confirm",
-        message: "需要將更名檔案存到新資歷夾嗎？",
+        message: "需要將更名檔案存到新資料夾嗎？",
         default: false,
       })
       .then((rep) => (this.isNewFolder = rep.new_folder));

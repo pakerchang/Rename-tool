@@ -1,16 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const chalk = require("chalk");
-
 const fsPromise = fs.promises;
 
 class RenameCore {
-  constructor() {
-    this.fileTypes = [".jpg", ".jpeg", ".png", ".svg"];
-    this.directoryPath = path.join(process.cwd());
-    this.getFiles = fs
-      .readdirSync(directoryPath)
-      .filter((item) => fileTypes.includes(path.extname(item)));
+  constructor(directoryPath) {
+    this.fileTypes = [];
+    this.directoryPath = directoryPath;
+    this.getFiles = [];
     this.prefixName = "";
     this.newFolder = false;
   }
@@ -20,7 +17,7 @@ class RenameCore {
       this.prefixName = prefixName;
     }
     if (isNewFolder) {
-      this.newFolder = newFolder;
+      this.newFolder = "NewFolder";
       this.checkFolder();
     }
 
@@ -28,14 +25,19 @@ class RenameCore {
       const result = this.checkFile(file);
       if (result.isExists) {
         this.copy_renameFile(file, idx, result);
+      } else {
+        console.log("No Files");
       }
     });
+  }
+
+  updateTypes(types) {
+    return (this.fileTypes = types.map((item) => "." + item));
   }
 
   checkFile(file) {
     return {
       isExists: this.fileTypes.includes(path.extname(file)),
-      isNewFolder: isNewFolder,
       filePath: this.directoryPath,
       prefixName: this.prefixName,
       extension: path.extname(file),
@@ -43,7 +45,7 @@ class RenameCore {
   }
 
   checkFolder() {
-    const dir = `${process.cwd()}/NewFolder`;
+    const dir = `${this.directoryPath}/NewFolder`;
     const checkResult = fs.existsSync(dir);
     if (!checkResult) fs.mkdirSync(dir);
   }
@@ -54,7 +56,7 @@ class RenameCore {
     if (this.newFolder) {
       fsPromise.copyFile(oldDirectoryPath, newDirectoryPath + file).then(
         () =>
-          fs.rename(
+          fs.renameSync(
             newDirectoryPath + file,
             newDirectoryPath + fileInfo.prefixName + idx + fileInfo.extension
           ),
