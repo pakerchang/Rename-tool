@@ -32,4 +32,6 @@ rename-image
 ## Todo
 
 - [x] 修正檔案讀取順序
-- [ ] 新增動態增減改動檔案類型功能
+- [x] 新增動態增減改動檔案類型功能
+- [ ] Refactor project to tool-collection
+- [ ] Add execel parser
