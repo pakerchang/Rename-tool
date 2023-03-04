@@ -12,7 +12,7 @@ class ScriptActions {
     this.isPrefix = false;
     this.isNewFolder = false;
     this.filePrefix = "";
-    this.directoryPath = path.join(process.cwd() + "/temp");
+    this.directoryPath = path.join(process.cwd());
     this.typeList = ["jpg", "jpeg", "png", "svg"];
     this.renameCore = new RenameCore(this.directoryPath);
   }
